@@ -1,5 +1,5 @@
 import cv2
-from keras.models import load_model
+from keras.models import model_from_json
 import numpy as np
 import speech_recognition as sr
 import threading
@@ -7,17 +7,6 @@ import time
 
 # Initialize speech recognizer
 recognizer = sr.Recognizer()
-
-# Load the model
-model = load_model('./facialemotionmodel.h5')
-def get_camera_index():
-    # Check available cameras to find a valid index
-    for i in range(10):  # Try up to 10 cameras
-        cap = cv2.VideoCapture(i)
-        if cap.read()[0]:
-            cap.release()
-            return i
-    return None
 
 # Function to detect emotion
 def detect_emotion(image):
@@ -27,69 +16,98 @@ def detect_emotion(image):
 
 # Function to interact with ChatGPT
 def chat_with_gpt(text, emotion):
+    # Interaction with ChatGPT logic here...
+    # Use the text and detected emotion to communicate with ChatGPT
     print(f"Emotion: {emotion}")
     print(f"Query: {text}")
-    # Use the text and detected emotion for further processing
-    # Your ChatGPT interaction code here
+    # Replace this with your ChatGPT interaction code
 
-def process_audio():
+# Load the facial emotion detection model and cascade classifier...
+json_file = open("facialemotionmodel.json", "r")
+model_json = json_file.read()
+json_file.close()
+model = model_from_json(model_json)
+model.load_weights("facialemotionmodel.h5")
+haar_file = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+face_cascade = cv2.CascadeClassifier(haar_file)
+
+def extract_features(image):
+    feature = np.array(image)
+    feature = feature.reshape(1, 48, 48, 1)
+    return feature / 255.0
+
+# Function to process video
+def process_video(chat_function):
+    webcam = cv2.VideoCapture(0)
+    labels = {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise'}
+    
+    while True:
+        ret, im = webcam.read()
+        gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(im, 1.3, 5)
+        
+        try:
+            for (p, q, r, s) in faces:
+                image = gray[q:q + s, p:p + r]
+                cv2.rectangle(im, (p, q), (p + r, q + s), (255, 0, 0), 2)
+                image = cv2.resize(image, (48, 48))
+                img = extract_features(image)
+                pred = model.predict(img)
+                prediction_label = labels[pred.argmax()]
+                print("Predicted Output:", prediction_label)
+                cv2.putText(im, '% s' % (prediction_label), (p - 10, q - 10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (0, 0, 255))
+
+                # Pass detected emotion to the chat function
+                chat_function(prediction_label)
+            
+            cv2.imshow("Output", im)
+            key = cv2.waitKey(1)
+            
+            if key == ord('q'):
+                break
+            
+        except cv2.error:
+            pass
+
+# Function to process audio
+def process_audio(chat_function):
     while True:
         with sr.Microphone() as source:
-            print("Listening...")
+            print("Say something:")
             audio = recognizer.listen(source)
-
+        
         try:
             query = recognizer.recognize_google(audio)
             print("You said:", query)
             
-            if "alexa" in query.lower():  # Check for the keyword "Alexa"
-                print("Keyword 'Alexa' detected. Activating camera for emotion detection...")
-                camera_index = get_camera_index()
-                if camera_index is None:
-                    print("No camera available.")
-                    continue
-
-                webcam = cv2.VideoCapture(camera_index)
-                labels = {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise'}
-                haar_file = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-                face_cascade = cv2.CascadeClassifier(haar_file)
-
-                while True:
-                    ret, im = webcam.read()
-                    gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-                    faces = face_cascade.detectMultiScale(im, 1.3, 5)
-
-                    try:
-                        for (p, q, r, s) in faces:
-                            image = gray[q:q + s, p:p + r]
-                            cv2.rectangle(im, (p, q), (p + r, q + s), (255, 0, 0), 2)
-                            image = cv2.resize(image, (48, 48))
-                            img = extract_features(image)
-                            pred = model.predict(img)
-                            prediction_label = labels[pred.argmax()]
-                            print("Predicted Output:", prediction_label)
-                            cv2.putText(im, '% s' % (prediction_label), (p - 10, q - 10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (0, 0, 255))
-
-                        cv2.imshow("Output", im)
-                        key = cv2.waitKey(1)
-
-                        if key == ord('q'):
-                            break
-
-                    except cv2.error:
-                        pass
-
-                    # Stop camera and get the detected emotion
-                    webcam.release()
-                    detected_emotion = prediction_label
-                    chat_with_gpt(query, detected_emotion)
-                    break
-
+            # Capture frames for 2 seconds
+            frames = []
+            start_time = time.time()
+            while (time.time() - start_time) < 10:
+                _, frame = webcam.read()
+                frames.append(frame)
+            
+            # Process the collected frames
+            if frames:
+                avg_frame = np.mean(frames, axis=0, dtype=np.uint8)
+                emotion = detect_emotion(avg_frame)
+                chat_with_gpt(query, emotion)
+        
         except sr.UnknownValueError:
             print("Could not understand audio")
         except sr.RequestError as e:
             print("Error: {0}".format(e))
 
-# Start the audio processing thread
-audio_thread = threading.Thread(target=process_audio)
+# Create a function to pass emotion from video processing to audio processing
+def pass_emotion(emotion):
+    # This function can be used to pass emotion from video processing to audio processing
+    # In this example, it prints the received emotion
+    print(f"Received Emotion: {emotion}")
+
+# Run video processing in the main thread
+video_thread = threading.Thread(target=process_video, args=(pass_emotion,))
+video_thread.start()
+
+# Run audio processing in a separate thread
+audio_thread = threading.Thread(target=process_audio, args=(chat_with_gpt,))
 audio_thread.start()
