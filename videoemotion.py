@@ -24,8 +24,9 @@ def detect_emotion():
     webcam = cv2.VideoCapture(0)
     labels = {0: 'angry', 1: 'disgust', 2: 'fear', 3: 'happy', 4: 'neutral', 5: 'sad', 6: 'surprise'}
     
-    start_time = cv2.getTickCount() / cv2.getTickFrequency()
-    while True:
+    emotion_detected = False  # Flag to check if emotion is detected
+    
+    while not emotion_detected:
         _, im = webcam.read()
         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(im, 1.3, 5)
@@ -39,17 +40,17 @@ def detect_emotion():
                 prediction_label = labels[pred.argmax()]
                 print("Predicted Output:", prediction_label)
                 cv2.putText(im, '% s' % (prediction_label), (p - 10, q - 10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (0, 0, 255))
+                
+                # Set the flag to indicate emotion detection
+                emotion_detected = True
+                
             cv2.imshow("Output", im)
-            key = cv2.waitKey(1)
-            
-            current_time = cv2.getTickCount() / cv2.getTickFrequency()
-            if (current_time - start_time) > 5:  # Run the camera for 5 seconds
-                break
+            cv2.waitKey(1)
             
         except cv2.error:
             pass
 
-    return 'Detected Emotion'
+    return prediction_label
 
 # Run emotion detection and return the detected emotion
 detected_emotion = detect_emotion()
