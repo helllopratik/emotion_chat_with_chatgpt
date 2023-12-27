@@ -1,8 +1,17 @@
 import speech_recognition as sr
 import subprocess
+import requests
 
 # Initialize speech recognizer
 recognizer = sr.Recognizer()
+
+def send_query_to_gpt(query):
+    endpoint = "https://api.openai.com/v1/engines/davinci/completions"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"  # Replace YOUR_API_KEY with your actual API key
+    }
+
 
 def detect_keyword(voice_text):
     if "alexa" in voice_text.lower():
