@@ -1,11 +1,11 @@
 import cv2
 import speech_recognition as sr
-import openai
+import my_openai
 from keras.models import model_from_json
 import numpy as np
 
 # Add your OpenAI API key here
-openai.api_key = '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'
+my_openai.api_key = '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'
 
 # Load the facial emotion detection model
 # ... (Your model loading code here)
@@ -54,7 +54,7 @@ while True:
         
         # Combine the detected emotion and user query and send to ChatGPT
         chat_input = f"I am feeling {prediction_label}. {query}"
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "system", "content": chat_input}])
+        response = my_openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "system", "content": chat_input}])
         chat_reply = response['choices'][0]['message']['content']
         
         print("ChatGPT reply:", chat_reply)

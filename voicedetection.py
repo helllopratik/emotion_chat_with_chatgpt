@@ -9,7 +9,7 @@ def send_query_to_gpt(query):
     endpoint = "https://api.openai.com/v1/engines/davinci/completions"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer sk-wWKT##########################00zsV4KG7"  # Replace YOUR_API_KEY with your actual API key
+        "Authorization": "Bearer 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"  # Replace YOUR_API_KEY with your actual API key
     }
 
     data = {
@@ -52,7 +52,7 @@ while True:
             detected_emotion = run_video_emotion()
             print(f"Detected Emotion: {detected_emotion}\nQuery: {query}")
             a = detected_emotion + query
-            response = send_query_to_gpt(query)
+            response = send_query_to_gpt(a)
             print("ChatGPT:", response)
     except sr.UnknownValueError:
         print("Could not understand audio")
