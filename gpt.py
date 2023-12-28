@@ -10,7 +10,7 @@ def send_query_to_gpt(prompt):
     endpoint = "https://api.openai.com/v1/engines/davinci/completions"
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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"  # Replace with your API key
+        "Authorization": "Bearer YOUR_API"  # Replace with your API key
     }
 
     data = {
