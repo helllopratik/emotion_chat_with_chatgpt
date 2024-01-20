@@ -1,1 +1,0 @@
-run textgpt.py for text based chat and videoemotion.py for emotion detection
