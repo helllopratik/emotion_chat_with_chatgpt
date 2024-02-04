@@ -1,7 +1,7 @@
 import subprocess
 import openai
 
-openai.api_key = 'Your-API-KEY'
+openai.api_key = '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'
 
 def run_video_emotion():
     try:

@@ -5,7 +5,7 @@ from gtts import gTTS
 from playsound import playsound
 
 # OpenAI API key
-openai.api_key = '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'
+openai.api_key = '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'
 
 # Function to convert text to speech
 def text_to_speech(text, filename="response.mp3", speed=1.5):

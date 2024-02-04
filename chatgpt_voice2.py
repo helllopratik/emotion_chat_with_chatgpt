@@ -10,7 +10,7 @@ import numpy as np
 import speech_recognition as sr
 import subprocess
 
-openai.api_key = 'YOUR_API'
+openai.api_key = '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'
 language = 'en'
 
 r = sr.Recognizer()
@@ -66,7 +66,9 @@ def listen_and_respond(source):
             'sad': 'consider my emotion as sad',
             'angry': 'consider my emotion as angry',
             'surprise': 'consider my emotion as surprised',
+            'fear': 'consider my emotion as feared',
             'neutral': 'consider my emotion as neutral'
+            
         }
 
             emotion_context = emotions_mapping.get(detected_emotion, 'consider my emotion as neutral')

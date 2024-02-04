@@ -1,1 +1,1 @@
-# run textgpt.py for text based chat and videoemotion.py for emotion detection
+# run textgpt.py for text based chat and videoemotion.py for emotion detection, require 'sudo apt install ffmpeg', 'pip install pycryptodome'
