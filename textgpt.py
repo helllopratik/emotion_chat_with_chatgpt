@@ -1,7 +1,8 @@
 import subprocess
-import openai
+from openai import OpenAI
 
-openai.api_key = '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'
+client = OpenAI(api_key='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')
+
 
 def run_video_emotion():
     try:
@@ -30,8 +31,8 @@ def get_emotion_context(detected_emotion):
 
 def query_chat_gpt(query, emotion_context):
     try:
-        
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{emotion_context} {query}"}])
+
+        response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{emotion_context} {query}"}])
         response_text = response.choices[0].message.content
         return response_text
     except Exception as e:
@@ -44,7 +45,7 @@ def main():
             user_query = input("Enter your query (or 'exit' to quit): ")
             if user_query.lower() in ['exit', 'quit']:
                 break
-            
+
             detected_emotion = run_video_emotion()
             emotion_context = get_emotion_context(detected_emotion)
             #print({detected_emotion})

@@ -1,5 +1,7 @@
 import os
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key='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')
 import time
 import speech_recognition as sr
 from gtts import gTTS
@@ -10,7 +12,6 @@ import numpy as np
 import speech_recognition as sr
 import subprocess
 
-openai.api_key = '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'
 language = 'en'
 
 r = sr.Recognizer()
@@ -68,7 +69,7 @@ def listen_and_respond(source):
             'surprise': 'consider my emotion as surprised',
             'fear': 'consider my emotion as feared',
             'neutral': 'consider my emotion as neutral'
-            
+
         }
 
             emotion_context = emotions_mapping.get(detected_emotion, 'consider my emotion as neutral')
@@ -77,13 +78,13 @@ def listen_and_respond(source):
             if not text:
                 continue
             print(a)
-            response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{a}"}])
+            response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{a}"}])
             response_text = response.choices[0].message.content
             print(response_text)
 
             myobj = gTTS(text=response_text, lang=language, slow=False)
             myobj.save("response.mp3")
-            
+
             play_audio("response.mp3")
 
             if not audio:

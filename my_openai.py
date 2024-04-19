@@ -1,11 +1,12 @@
 import os
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key='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')
 import speech_recognition as sr
 from gtts import gTTS
 from playsound import playsound
 
 # OpenAI API key
-openai.api_key = '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'
 
 # Function to convert text to speech
 def text_to_speech(text, filename="response.mp3", speed=1.5):
@@ -26,11 +27,9 @@ def speech_to_text(audio_file):
 
 # Function to interact with ChatGPT
 def chat_with_gpt(query):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=query,
-        max_tokens=50
-    )
+    response = client.completions.create(engine="davinci",
+    prompt=query,
+    max_tokens=50)
     return response.choices[0].text.strip()
 
 # Record audio and save it as an MP3 file

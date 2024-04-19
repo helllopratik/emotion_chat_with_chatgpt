@@ -1,5 +1,7 @@
 import os
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key='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')
 import time
 import speech_recognition as sr
 from gtts import gTTS
@@ -10,7 +12,6 @@ import numpy as np
 import subprocess
 import requests
 
-openai.api_key = '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'
 language = 'en'
 
 r = sr.Recognizer()
@@ -58,14 +59,14 @@ def listen_and_respond(source):
             print(f"You said: {text}")
             if not text:
                 continue
-            
-            response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{text}"}])
+
+            response = client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": f"{text}"}])
             response_text = response.choices[0].message.content
             print(response_text)
 
             myobj = gTTS(text=response_text, lang=language, slow=False)
             myobj.save("response.mp3")
-            
+
             play_audio("response.mp3")
 
             if not audio:
@@ -94,7 +95,7 @@ def send_query_to_gpt(query):
 
     response = requests.post(endpoint, headers=headers, json=data)
     if response.status_code == 200:
-        return response.json()["choices"][0]["text"]
+        return response.json().choices[0].text
     else:
         return "Failed to get a response from ChatGPT"
 
@@ -119,7 +120,7 @@ def run_combined():
             audio = handle_microphone()
             query = r.recognize_google(audio)
             print("You said:", query)
-            
+
             if detect_keyword(query):
                 print("Keyword 'what' detected. Running emotion detection...")
                 detected_emotion = run_video_emotion()

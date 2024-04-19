@@ -1,10 +1,11 @@
 import cv2
+import os
 from keras.models import model_from_json
 import numpy as np
 import speech_recognition as sr
 import threading
 import time
-
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 # Initialize speech recognizer
 recognizer = sr.Recognizer()
 
