@@ -1,0 +1,9 @@
+1) main_program.py --for loop.
+2) 10maychatbot.py --orignal base code.
+3) 7mayreal1.py --realtime detection.
+4) 8maybot.py -- ver. 1 of real time detection along with chatbot. After detecting emotion press 'q'
+5) wake_word_detector.py -- type 'hey gemini' to call main_program,py.
+6) .env -- API key
+7) todo.txt -- Discription of each stages of code file
+8) maincode.py --final implementation working code. (Partial checked)
+###########################END OF LINE#######################################
