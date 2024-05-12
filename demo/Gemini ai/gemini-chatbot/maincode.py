@@ -1,4 +1,4 @@
-# 10maychatbot.py
+# maincode.py
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -82,5 +82,5 @@ while True:
         if part.text:
             all_responses.append(part.text)
             print(f'Bot: {" ".join(all_responses)}')
-    os.system('pkill -f 10maychatbot.py')
+    os.system('pkill -f maincode.py')
 

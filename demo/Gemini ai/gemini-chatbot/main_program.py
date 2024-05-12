@@ -8,7 +8,7 @@ def run_gemini():
    
     #question = input("You: ")
     # Your logic to send the question to Gemini and process the response
-    os.system('python 10maychatbot.py')
+    os.system('python maincode.py')
    
     # Terminate the script (optional)
     #os.system('python 10maychatbot.py')  # Use with caution, consider #exit()
