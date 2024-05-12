@@ -5,5 +5,12 @@
 5) wake_word_detector.py -- type 'hey gemini' to call main_program,py.
 6) .env -- API key
 7) todo.txt -- Discription of each stages of code file
-8) maincode.py --final implementation working code. (Partial checked)
+8) maincode.py --final implementation working code. (working)
+9) 11maymaincode.py --fixed issue file.
+10) 12may_maincode_gui.py --GUI support file (No Issue)
+11) 12may_2.py --incomplete code, response should be in minimum paragraph
+12) 12_may_replit.py --Incomelete code, ref (11) from co-pilot pending.
+
+
+
 ###########################END OF LINE#######################################
