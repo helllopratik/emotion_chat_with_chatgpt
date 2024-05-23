@@ -1,2 +1,2 @@
 # project_emotion_detection_using_camera_and_sending_query_to_chatgpt_along_with_emotion
-This is the join project of sending query to chatgpt along with emotion
+This is the alpha project of sending query to chatgpt along with emotion
