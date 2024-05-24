@@ -1,16 +1,26 @@
 1) main_program.py --for loop.
 2) 10maychatbot.py --orignal base code.
 3) 7mayreal1.py --realtime detection.
-4) 8maybot.py -- ver. 1 of real time detection along with chatbot. After detecting emotion press 'q'
+4) 8maybot.py -- ver. 1 of real time detection along with chatbot. After detecting emotion press 'q'.
 5) wake_word_detector.py -- type 'hey gemini' to call main_program,py.
-6) .env -- API key
-7) todo.txt -- Discription of each stages of code file
-8) maincode.py --final implementation working code. (working)
+6) .env -- API key.
+7) todo.txt -- Discription of each stages of code file.
+8) maincode.py --final implementation working code (working).
 9) 11maymaincode.py --fixed issue file.
-10) 12may_maincode_gui.py --GUI support file (No Issue)
-11) 12may_2.py --incomplete code, response should be in minimum paragraph
+10) 12may_maincode_gui.py --GUI support file (No Issue).
+11) 12may_2.py --incomplete code, response should be in minimum paragraph (renamed as may23custom.py).
 12) 12_may_replit.py --Incomelete code, ref (11) from co-pilot pending.
-
+13) may23custom.py --custom message if detect sad, happy, etc (no gui).
 
 
 ###########################END OF LINE#######################################
+50% could be prompt engineer.
+100% could be merge of emotion detection with LLM.
+
+Prompt engineering: Test the gpt level for understanding the emotion. how much the gpt interpret or understand the emotion and based on that what improvement needs.
+
+
+
+
+
+###########################END OF FILE#######################################
